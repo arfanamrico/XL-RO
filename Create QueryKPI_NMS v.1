@@ -1,0 +1,44 @@
+script ini meng query data kpi nms format csv dan menjadikan nya 1 file excel 2sheet
+
+import pandas as pd
+import os
+
+target = ['421D232E','4222758E','4214214E']
+namefile = 'KPI_NMS.xlsx'
+dirpath = r"D:\RO XL\KPI\RO_G1_WEST_VDT_NMS_KPI-20240701"
+
+def sub1 ():
+    global subrep1
+    df = pd.read_csv(f'{dirpath}/{name}')
+    df = pd.DataFrame(df)
+    df['SiteID'] = df['eNodeB Name'].str.split('_').str[0]
+    ds = df[df['SiteID'].isin(target)]
+    subrep1 = ds[['Date','eNodeB Name','Cell FDD TDD Indication','Cell Name','LocalCell Id','eNodeB Function Name','Integrity','HX4_Cell Availability','NPM_4G_SSSR(%)','NPM_4G_SSSR_Den(number)','NPM_4G_SSSR_Num(number)','CBRA','CBRA_Denum','CBRA_Num','NPM_4G_ERABDropRate(%)','NPM_4G_ERABDropDen(number)','NPM_4G_ERABDropNum(number)','NPM_4G_HOSRIntraFreq(%)','NPM_4G_HOSRIntraFreq_Den(number)','NPM_4G_HOSRIntraFreq_Num(number)','NPM_4G_Payload_DL_GB','NPM_4G_Payload_UL_GB','HX4_DL User Peak Throughput','Number of RRC Connected User','NPM_4G_CQI','NPM_4G_CQI_Den','NPM_4G_CQI_Num','NPM_4G_QPSK_Den(number)','NPM_4G_QPSK_Num(number)','NPM_4G_QPSK_Rate(%)','UL RSSI PUCCH (dBm)','UL RSSI PUCCH (dBm)_Denum','UL RSSI PUCCH (dBm)_Num','NPM_4G_TxRank2Den(number)','NPM_4G_TxRank2Num(number)','NPM_4G_TxRank2Rate(%)','Rank2(%)(4T4R)','L-TA_0-156 m','L-TA_156-234 m','L-TA_234-546 m','L-TA_546-1.014 km','L-TA_1.014-1.950 km','L-TA_1.950-3.510 km','L-TA_3.510-6.630 km','L-TA_6.630-14.430 km','L-TA_14.430-30.030 km','L-TA_30.030-53.430 km','L-TA_53.430-76.830 km','L-TA_more 76.830 km','User UL PDCP Average Throughput','HX4_VoLTE Traffic (Erl)','HX4_VOLTE User average','VOLTE Call drop rate(%)']]
+    subrep1 = subrep1.replace(['/0','NIL','NULL'],"")
+    print('subrepot 1 Filter')
+
+
+def sub2 ():
+    global subrep2
+    df = pd.read_csv(f'{dirpath}/{name}')
+    df = pd.DataFrame(df)
+    df['SiteID'] = df['eNodeB Name'].str.split('_').str[0]
+    ds = df[df['SiteID'].isin(target)]
+    subrep2 = ds[['Date','eNodeB Name','Cell FDD TDD Indication','Cell Name','LocalCell Id','eNodeB Function Name','Integrity','HX4_Cell Availability','NPM_4G_SSSR(%)','NPM_4G_SSSR_Den(number)','NPM_4G_SSSR_Num(number)','CBRA','CBRA_Denum','CBRA_Num','NPM_4G_ERABDropRate(%)','NPM_4G_ERABDropDen(number)','NPM_4G_ERABDropNum(number)','NPM_4G_HOSRIntraFreq(%)','NPM_4G_HOSRIntraFreq_Den(number)','NPM_4G_HOSRIntraFreq_Num(number)','NPM_4G_Payload_DL_GB','NPM_4G_Payload_UL_GB','HX4_DL User Peak Throughput','Number of RRC Connected User','NPM_4G_CQI','NPM_4G_CQI_Den','NPM_4G_CQI_Num','NPM_4G_QPSK_Den(number)','NPM_4G_QPSK_Num(number)','NPM_4G_QPSK_Rate(%)','UL RSSI PUCCH (dBm)','UL RSSI PUCCH (dBm)_Denum','UL RSSI PUCCH (dBm)_Num','NPM_4G_TxRank2Den(number)','NPM_4G_TxRank2Num(number)','NPM_4G_TxRank2Rate(%)','Rank2(%)(4T4R)','L-TA_0-156 m','L-TA_156-234 m','L-TA_234-546 m','L-TA_546-1.014 km','L-TA_1.014-1.950 km','L-TA_1.950-3.510 km','L-TA_3.510-6.630 km','L-TA_6.630-14.430 km','L-TA_14.430-30.030 km','L-TA_30.030-53.430 km','L-TA_53.430-76.830 km','L-TA_more 76.830 km','HX4_CSFB Execution Sucess Rate','HX4_VoLTE call setup success rate','HX4_SRVCC Success Rate(L2U)','HX4_SRVCC Success Rate(L2G)']]
+    subrep2 = subrep2.replace(['/0','NIL','NULL'],"")    
+    print('subrepot 2 Filter')
+
+shet1 = 'Subreport 1'
+shet2 = 'Subreport 2'
+for name in os.listdir(dirpath):
+    subcek = name[38:49]
+    if subcek == shet1:
+        sub1()
+    if subcek == shet2:
+        sub2()
+
+writer = pd.ExcelWriter(f'{dirpath}\{namefile}',engine='xlsxwriter')
+subrep1.to_excel(writer,index=False,sheet_name='subreport1')
+subrep2.to_excel(writer,index=False,sheet_name='subreport2')
+writer.close()
+print('done by PremanZX')
