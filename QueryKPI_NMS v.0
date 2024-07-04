@@ -1,0 +1,39 @@
+script ini meng query data kpi NMS format Excel dengan 2 sheet
+
+from openpyxl import load_workbook
+import pandas as pd
+import datetime
+
+path = r"D:\RO XL\KPI"
+filename = 'RO_G1_WEST_VDT_NMS_KPI_20240623.xlsx'
+namefile = 'datanms_20240621a.xlsx'
+target = ['421D232E','4222758E','4214214E']
+##======= membaca subreport 1 =====================
+df1 = pd.read_excel(f'{path}\{filename}',sheet_name='Subreport 1')
+df1 = pd.DataFrame(df1)
+df1['SiteID'] = df1['eNodeB Name'].str.split('_').str[0]
+ds = df1[df1['SiteID'].isin(target)]
+subrep1 = ds[['Date','eNodeB Name','eNodeB ID','Cell Name','Cell ID','eNodeB Name','Integrity Rate(%)','HX4_Cell Availability','Session Setup Success rate (SSSR)','DeNum_Session Setup Success rate (SSSR)','Num_Session Setup Success rate (SSSR)','CBRA','DeNum_CBRA','Num_CBRA','HX4_Call Drop Rate','DeNum_HX4_Call Drop Rate','Num_HX4_Call Drop Rate','HX4_Handover Success Rate Intra-Frequency','DeNum_HX4_Handover Success Rate Intra-Frequency','Num_HX4_Handover Success Rate Intra-Frequency','DL Payload(GB)','UL Payload(GB)','Downlink Peak User Throughput(Mbps)','Number Of RRC Connected User','HX4_DL Average CQI','denum_dl_average_cqi','num_dl_average_cqi','denum_dl_qpsk_ratio','num_dl_qpsk_ratio','DL QPSK Ratio','L.UL.Interference.Avg(dBm)','HX4_UL_Interference','HX4_UL_Interference','DeNum_HX4_Rank2(%)','Num_HX4_Rank2(%)','HX4_Rank2(%)','rank2','L.RA.TA.UE.Index0','L.RA.TA.UE.Index1','L.RA.TA.UE.Index2','L.RA.TA.UE.Index3','L.RA.TA.UE.Index4','L.RA.TA.UE.Index5','L.RA.TA.UE.Index6','L.RA.TA.UE.Index7','L.RA.TA.UE.Index8','L.RA.TA.UE.Index9','L.RA.TA.UE.Index10','L.RA.TA.UE.Index11','HX4_UL User Throughput (Mbps)','HX4_VoLTE Traffic (Erl)','HX4_VOLTE User average','HX4_VoLTE Drop Call Rate(%)']]
+# datasubrep1 = subrep1[subrep1['SiteID'].isin(target)]
+subrep1 = subrep1.replace(['/0'],"")
+##==================================================
+##======= membaca subreport 2 =====================
+df2 = pd.read_excel(f'{path}\{filename}',sheet_name='Subreport 2')
+df2 = pd.DataFrame(df2)
+df2[['y','m','d']] = df2['Date'].str.split('-',expand=True)
+df2['d'] = df2['d'].str.split(' ').str[0]
+df2['Date'] = df2['y']+'-'+df2['m']+'-'+df2['d']
+# df2['Date'] = pd.to_datetime(df2['Date']) #merubah format string to datetime
+# df2['Date'] = df2['Date'].strftime("%Y-%m-%d")
+df2['SiteID'] = df2['eNodeB Name'].str.split('_').str[0]
+ds2 = df2[df2['SiteID'].isin(target)]
+subrep2 = ds2[['Date','eNodeB Name','eNodeB ID','Cell Name','Cell ID','eNodeB Name','Integrity Rate(%)','HX4_Cell Availability','Session Setup Success rate (SSSR)','DeNum_Session Setup Success rate (SSSR)','Num_Session Setup Success rate (SSSR)','CBRA','DeNum_CBRA','Num_CBRA','HX4_Call Drop Rate','DeNum_HX4_Call Drop Rate','Num_HX4_Call Drop Rate','HX4_Handover Success Rate Intra-Frequency','DeNum_HX4_Handover Success Rate Intra-Frequency','Num_HX4_Handover Success Rate Intra-Frequency','DL Payload(GB)','UL Payload(GB)','Downlink Peak User Throughput(Mbps)','Number Of RRC Connected User','HX4_DL Average CQI','denum_dl_average_cqi','num_dl_average_cqi','denum_dl_qpsk_ratio','num_dl_qpsk_ratio','DL QPSK Ratio','L.UL.Interference.Avg(dBm)','HX4_UL_Interference','HX4_UL_Interference','DeNum_HX4_Rank2(%)','Num_HX4_Rank2(%)','HX4_Rank2(%)','rank2','L.RA.TA.UE.Index0','L.RA.TA.UE.Index1','L.RA.TA.UE.Index2','L.RA.TA.UE.Index3','L.RA.TA.UE.Index4','L.RA.TA.UE.Index5','L.RA.TA.UE.Index6','L.RA.TA.UE.Index7','L.RA.TA.UE.Index8','L.RA.TA.UE.Index9','L.RA.TA.UE.Index10','L.RA.TA.UE.Index11','HX4_CSFB Execution Sucess Rate','HX4_VoLTE call setup success rate','HX4_SRVCC Success Rate(L2U)','HX4_SRVCC Success Rate(L2G)']]
+# datasubrep1 = subrep1[subrep1['SiteID'].isin(target)]
+subrep2 = subrep2.replace(['/0'],"")
+print(subrep2.head())
+writer = pd.ExcelWriter(f'{path}\{namefile}',engine='xlsxwriter')
+subrep1.to_excel(writer,index=False,sheet_name='subreportnms1')
+subrep2.to_excel(writer,index=False,sheet_name='subreportnms2')
+writer.close()
+print('done by PremanZX')
+# print(df2['Date'])
