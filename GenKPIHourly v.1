@@ -1,0 +1,39 @@
+import pandas as pd
+import os
+
+target = ['4212493E','4253381E','4222768E','4222792E']
+filename = 'cekperformance1.csv'
+dirpath = r"D:\RO XL\KPI\RO_G1_WEST_KPI_Monitoring-20240714"
+
+def sub1 ():
+    df = pd.read_csv(f'{dirpath}/{name}')
+    df = pd.DataFrame(df)
+    df['date'] = df['Date'].str.split().str[0]
+    # df['Time'] = df['Date'].str.split().str[1]
+    df['SiteID'] = df['eNodeB Name'].str.split('_').str[0]
+    df['eNodeB Function Name'] = df['eNodeB Name']
+    ##============memilih band===========
+    df['kodetech'] = df['Cell Name'].str.split('_').str[0].str[3:6] 
+    # df = df[df['kodetech']=='G18'].reset_index()
+    df.loc[df['kodetech'] =='G18','Band'] = 'L1800'
+    df.loc[df['kodetech'] =='G21','Band'] = 'L2100'
+    df.loc[df['kodetech'] =='G09','Band'] = 'L900'
+    ##===================================
+    ##========buat colom sectoral===========
+    df.loc[df['LocalCell Id'].isin([1,4,7,11,16,21,24,27,31,34,37,44,47]),'Sector'] = 1  # LocalCell Id diganti ke LocalCell Id sementara Integrity Rate(%)
+    df.loc[df['LocalCell Id'].isin([2,5,8,12,17,22,25,28,32]),'Sector'] = 2
+    df.loc[df['LocalCell Id'].isin([3,6,9,13,18,23,26,29,33]),'Sector'] = 3
+    ##======================================
+    data = df[['date','Time','eNodeB Name','Band','Cell Name','LocalCell Id','eNodeB Function Name','Integrity','HX4_UL User Throughput (Mbps)','HX4_DL User Throughput (Mbps)','User UL PDCP Average Throughput','HX4_Rank2(%)','HX4_Cell Availability','HX4_DL PRB Utilization','HX4_UL PRB Utilization','HX4_DL User Peak Throughput','HX4_UL User Peak Throughput','HX4_ Cell DL Throughput(Mbit/s)','HX4_RRC Setup Success Rate','L.RRC.ConnReq.Att','L.RRC.ConnReq.Succ','HX4_E-RAB Setup Success Rate','L.E-RAB.AttEst','L.E-RAB.SuccEst','L-S1 SIG Setup Success Rate','L.S1Sig.ConnEst.Att','L.S1Sig.ConnEst.Succ','HX4_Call Drop Rate','L.E-RAB.AbnormRel','L.E-RAB.NormRel','HX4_CSFB Execution Sucess Rate','L.CSFB.E2G','L.CSFB.E2W','L.CSFB.PrepSucc','HX4_Handover Success Rate Intra-Frequency(%)','HX4_Handover Success Rate Inter-RAT (IRAT-HO, not RwR)(%)','HX4_Handover Success Rate Inter-Frequency(%)','L.RRC.ConnReq.Msg.disc.FlowCtrl','L.RRC.SetupFail.NoReply','L.RRC.SetupFail.Rej','L.RRC.SetupFail.Rej.FlowCtrl','L.RRC.SetupFail.ResFail','L.RRC.SetupFail.ResFail.PUCCH','L.RRC.SetupFail.ResFail.SRS','L.E-RAB.FailEst.Conflict.Hofail','L.E-RAB.FailEst.MME','L.E-RAB.FailEst.NoRadioRes','L.E-RAB.FailEst.NoReply','L.E-RAB.FailEst.Other','L.E-RAB.FailEst.RNL','L.E-RAB.FailEst.RNL.Other','L.E-RAB.FailEst.SecurModeFail','L.E-RAB.FailEst.TNL','L.E-RAB.FailEst.X2AP','L.E-RAB.AbnormRel.Radio','L.E-RAB.AbnormRel.Radio.SRBReset','L.E-RAB.AbnormRel.Radio.ULSyncFail','L.E-RAB.AbnormRel.Radio.UuNoReply','L.E-RAB.AbnormRel.TNL','L.E-RAB.AbnormRel.TNL.Load','L.E-RAB.AbnormRel.TNL.PreEmp','L.E-RAB.AbnormRel.MME','L-Average PUSCH MCS','Total Payload 4G (GB)','L-PRB Utilization DL','L-PRB Utilization UL','L.Paging.S1.Rx','L.Paging.UU.Att','L.ChMeas.RI.Rank2','L.ChMeas.RI.Rank1','ActiveUser','L.UL.Interference.Avg(dBm)','L.UL.Interference.Max(dBm)','L.UL.Interference.Min(dBm)','DL Payload (GB)','HX4_MaxUser','HX4_AvgConn_User','RACH SR (%)','HX4_ Cell UL Throughput(Mbit/s)','HX4_Total PS Traffic Vol (GB)','HX4_UL_Interference','HX4_S1 Setup Success Rate','L.ChMeas.RI.Rank3','L.ChMeas.RI.Rank4','UL Payload (GB)','AVERAGE CQI','L-TA_0-156 m','L-TA_1.014-1.950 km','L-TA_1.950-3.510 km','L-TA_14.430-30.030 km','L-TA_156-234 m','L-TA_234-546 m','L-TA_3.510-6.630 km','L-TA_30.030-53.430 km','L-TA_53.430-76.830 km','L-TA_546-1.014 km','L-TA_6.630-14.430 km','L-TA_more 76.830 km','CBRA','UL_RSSI_LTE_New','DL QPSK%','L.ChMeas.PRB.DL.Avail(MHz)','NPM_4G_SSSR(%)','NPM_4G_SSSR_Den(number)','NPM_4G_SSSR_Num(number)','NPM_4G_DL_PacketLoss_PDCP(%)','NPM_4G_DL_PacketLoss_PDCP_Den','NPM_4G_DL_PacketLoss_PDCP_Num(number)','NPM_4G_UL_PacketLoss_PDCP(%)','NPM_4G_UL_PacketLoss_PDCP_Den(number)','NPM_4G_UL_PacketLoss_PDCP_Num(number)','L.DLPwr.Max(dBm)','L.DLPwr.Avg(dBm)','Last TTI Ratio(%)','HX4_Spectrum Efficiency','Average TA (m)','CA Payload (GB)','CA_User_Number(number)','L.HHO.InterFreq.Load.ExecAttOut','SiteID','Sector']]
+    ds = data[data['SiteID'].isin(target)]
+    ds = ds.replace(['/0','NIL'],"")
+    # df = df[df['parent_cell_id'].isin(celidtarget)] # ini adalah contoh syntax nya
+    ds.to_csv(f'{dirpath}/{filename}', index=False)
+    print(ds)
+    print('generated done')
+
+shet1 = '1'
+for name in os.listdir(dirpath):
+    subcek = name[-6]
+    if subcek == shet1:
+        sub1()
