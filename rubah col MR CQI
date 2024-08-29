@@ -1,0 +1,21 @@
+import pandas as pd
+import os
+
+
+dirpath = r"D:\xx\CQI"
+filenew = r'D:\xx\CQI'
+
+def ubah():
+    namafile = f'{nama}.csv'
+    df = pd.read_csv(path)
+    data = pd.DataFrame(df)
+    try:data.rename(columns={'DL Spectrum Efficiency (Kbps/MHz)':'DL Spectrum Efficiency (kbps/MHz)','UL Spectrum Efficiency (Kbps/MHz)':'UL Spectrum Efficiency (kbps/MHz)'},inplace=True)
+    except:pass
+    data.to_csv(f'{filenew}\{namafile}',index=False)
+    print(f'file {name} nama kolom updated by PremanZx!!!')
+for name in os.listdir(dirpath):
+    path = os.path.join(dirpath, name)    
+    if path.endswith('.csv') and os.path.isfile(path):
+        nama = name.split('.')[0]
+        ubah()
+print('='*10,'Copyright(C) Arfan Amrico','='*10)
