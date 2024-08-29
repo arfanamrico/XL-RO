@@ -1,0 +1,24 @@
+import pandas as pd
+import os
+# import win32com.client 
+
+filename = 'data_ta'
+dirpath = r"D:\RO XL\TA"
+
+def sub1 ():
+    ta = pd.read_csv(f'{dirpath}/{name}',skiprows=6)
+    ta = pd.DataFrame(ta)
+    data_ta = ta[['Date','eNodeB Name','LocalCell Id','Cell Name','eNodeB Function Name','L-TA_0-156 m','L-TA_156-234 m','L-TA_234-546 m','L-TA_546-1.014 km','L-TA_1.014-1.950 km','L-TA_1.950-3.510 km','L-TA_3.510-6.630 km','L-TA_6.630-14.430 km','L-TA_14.430-30.030 km','L-TA_30.030-53.430 km','L-TA_53.430-76.830 km','L-TA_more 76.830 km']]
+    data_ta.to_excel(f'{dirpath}/{filename}_{tgl}.xlsx', index=False)
+    print('generated done')
+
+shet1 = '1'
+for name in os.listdir(dirpath):
+    path = os.path.join(dirpath, name)    
+    if path.endswith('.csv') and os.path.isfile(path):
+        subcek = name[-6]
+        tgl = name.split('-')[1][0:8]
+        if subcek == shet1:
+            sub1()
+print('Copyright(C) Arfan Amrico')
+print('='*50,'arfan','='*50)
