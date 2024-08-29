@@ -1,0 +1,19 @@
+import pandas as pd
+import os
+
+dirpath = r'D:\RO XL\Report\Agust 24\4294890E_LTE_AMBARAWA_LAMPUNG\MR'
+
+def ubah():
+    namafile = f'{nama}.xlsx'
+    df = pd.read_csv(path)
+    data = pd.DataFrame(df)
+    data.to_excel(f'{dirpath}\{namafile}',index=False)
+    print(f'file {name} to .xlsx converted by PremanZx!!!')
+
+for name in os.listdir(dirpath):
+    path = os.path.join(dirpath, name)    
+    if path.endswith('.csv') and os.path.isfile(path):
+        nama = name.split('.')[0]
+        # print(nama)
+        ubah()
+print('='*10,'Copyright(C) Arfan Amrico','='*10)    
